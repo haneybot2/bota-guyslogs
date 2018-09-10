@@ -32,10 +32,6 @@ client.on('ready', () => {
   console.log('')
   console.log('')
 });
-client.on('warn', console.warn);
-client.on('error', console.error);
-client.on('ready', () => console.log('Yo this ready!'));
-client.on('reconnecting', () => console.log('I am reconnecting now!'));
 
 //restart-bot
       client.on('message', message => {
