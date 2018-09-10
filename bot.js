@@ -2,64 +2,81 @@ const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
 const prefix = "!";
+const devs = ['454527533279608852'];
 const moment = require("moment"); 
+const child_process = require("child_process");
+
+//restart-bot
+      client.on('message', message => {
+        var argresult = message.content.split(` `).slice(1).join(' ');
+           
+        if(message.content === prefix + "restart") {
+          if (!devs.includes(message.author.id)) return;
+            console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            console.log(`⚠️ Bot restarting... ⚠️`);
+            console.log("===============================================\n\n");
+            client.destroy();
+            child_process.fork(__dirname + "/bot.js");
+            console.log(`Bot Successfully Restarted`);
+        }
+      
+      });
 
 //channel-Create
-client.on('channelCreate', channelc => {
-
-    const logchannel = channelc.guild.channels.find('name', 'log');
+client.on('channelCreate', cc => {
+    const channel = cc.guild.channels.find("name","log")
 	
-    if(channelc.type === 'text') {
+	if(cc.type === 'text') {
         var roomType = ':pencil: #';
     }else
-    if(channelc.type === 'voice') {
+    if(cc.type === 'voice') {
         var roomType = ':microphone: ';
     }else
-    if(channelc.type === 'category') {
+    if(cc.type === 'category') {
         var roomType = '';
     }
     
-	    channelc.guild.fetchAuditLogs().then(logs => {
+	    cc.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
 	var userava = logs.entries.first().executor.avatarURL;
 	var usertag = logs.entries.first().executor.tag;
 
-    var channelCreate = new Discord.RichEmbed()
-    .setAuthor(channelc.guild.name, channelc.guild.iconURL)
-    .setDescription(`***Channel Created Name: *** **${roomType}${channelc.name}**\n by : <@${userid}>`)
-    .setFooter(`${usertag}`, userava)
-    .setTimestamp()
+    var embed = new Discord.RichEmbed()
+    .setAuthor(cc.guild.name, cc.guild.iconURL)
+    .setDescription(`***Channel Created Name: *** **${roomType}${cc.name}**\n by : <@${userid}>`)
     .setColor('#ff0000')
-    logchannel.sendEmbed(channelCreate)
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
    })
 });
 
 //channel-Delete
-client.on('channelDelete', channeld => {
-
-    const logchannel = channeld.guild.channels.find('name', 'log');
+client.on('channelDelete', dc => {
+    const channel = dc.guild.channels.find("name","log")
 	
-	if(channeld.type === 'text') {
+	if(dc.type === 'text') {
         var roomType = ':pencil: #';
     }else
-    if(channeld.type === 'voice') {
+    if(dc.type === 'voice') {
         var roomType = ':microphone: ';
     }else
-    if(channeld.type === 'category') {
+    if(dc.type === 'category') {
         var roomType = '';
     }
-	    channeld.guild.fetchAuditLogs().then(logs => {
+	
+	    dc.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
 	var userava = logs.entries.first().executor.avatarURL;
 	var usertag = logs.entries.first().executor.tag;
 
-    var channelCreate = new Discord.RichEmbed()
-    .setAuthor(channeld.guild.name, channeld.guild.iconURL)
-    .setDescription(`***Channel Deleted Name : *** **${roomType}${channeld.name}**\n by : <@${userid}>`)
-    .setFooter(`${usertag}`, userava)
-    .setTimestamp()
+    var embed = new Discord.RichEmbed()
+    .setAuthor(dc.guild.name, dc.guild.iconURL)
+    .setDescription(`***Channel Deleted Name : *** **${roomType}${dc.name}**\n by : <@${userid}>`)
     .setColor('#ff0000')
-    logchannel.sendEmbed(channelCreate)
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
    })
 });
 
