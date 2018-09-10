@@ -47,7 +47,7 @@ client.on('reconnecting', () => console.log('I am reconnecting now!'));
       } else   
         if(message.content === prefix + "restart") {
           if (!devs.includes(message.author.id)) return;
-	    message.channel.send(`:white_check_mark: **Bot restarting** !`);
+	    message.channel.send(`:white_check_mark: **restarting**`);
             console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(`⚠️ Bot restarting... ⚠️`);
             console.log("===============================================\n\n");
