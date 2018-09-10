@@ -292,7 +292,7 @@ client.on('messageUpdate', (message, newMessage) => {
 });
 
 //roleCreate
-client.on('messageUpdate', rc => {
+client.on('roleCreate', rc => {
     const channel = rc.guild.channels.find("name","log")
 	
 	    rc.guild.fetchAuditLogs().then(logs => {
@@ -311,7 +311,7 @@ client.on('messageUpdate', rc => {
 });
 
 //roleDelete
-client.on('messageUpdate', rd => {
+client.on('roleDelete', rd => {
     const channel = rd.guild.channels.find("name","log")
 	
 	    rd.guild.fetchAuditLogs().then(logs => {
