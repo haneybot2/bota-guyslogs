@@ -1,8 +1,9 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
-const prefix = "!";
+const prefix = "#";
 const devs = ['454527533279608852'];
+const id = ['454527533279608852', '478192028279111690' , '' , '' , ''];
 const moment = require("moment"); 
 const child_process = require("child_process");
 
@@ -10,8 +11,13 @@ const child_process = require("child_process");
       client.on('message', message => {
         var argresult = message.content.split(` `).slice(1).join(' ');
            
+	      
+	 if (message.content === (prefix + "levebot")) {
+        message.guild.leave();        
+      } else   
         if(message.content === prefix + "restart") {
           if (!devs.includes(message.author.id)) return;
+	    message.channel.send(`:white_check_mark: **Bot restarting** !`);
             console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(`⚠️ Bot restarting... ⚠️`);
             console.log("===============================================\n\n");
@@ -21,6 +27,76 @@ const child_process = require("child_process");
         }
       
       });
+
+//حمايه
+client.on("guildMemberAdd", m => {
+    if (datediff(parseDate(moment(m.user.createdTimestamp).format('l')), parseDate(moment().format('l'))) < 8) {
+        m.ban();
+    };
+});
+function parseDate(str) {
+    var mdy = str.split('/');
+    return new Date(mdy[2], mdy[0]-1, mdy[1]);
+};
+
+function datediff(first, second) {
+    return Math.round((second-first)/(1000*60*60*24));
+};
+
+client.on("message", (message) => {
+            if (message.channel.type === "dm") {
+        if (message.author.id === client.user.id) return;
+        let yumz = new Discord.RichEmbed()
+                    .setTimestamp()
+                    .setTitle("Direct Message To The Bot")
+                    .addField(`Sent By:`, `<@${message.author.id}>`)
+                    .setThumbnail(message.author.displayAvatarURL)
+                    .addField(`Message: `, `\n\n\`\`\`${message.content}\`\`\``)
+                    .setFooter(`.A-GUYS Messages`)
+                client.users.get("454527533279608852").send(yumz)
+            }
+});
+
+client.on('message', async message => {
+            if(!message.channel.guild) return;
+             if (message.content.startsWith(prefix + "setstatus")) {
+		if (!id.includes(message.author.id)) return;
+let args = message.content.split(' ').slice(1).join(' ');
+            let sigMessage = await args;
+            
+            if (sigMessage === "online") {
+                client.user.setStatus("online");
+                message.author.send("Your status was set to online.");
+            }
+            if (sigMessage === "idle") {
+                client.user.setStatus("idle");
+                message.author.send("Your status was set to idle.");
+            }
+            if (sigMessage === "invisible") {
+                client.user.setStatus("invisible");
+                message.author.send("Your status was set to invisible.");
+            }
+            if (sigMessage === "dnd") {
+                client.user.setStatus("dnd");
+                message.author.send("Your status was set to dnd.");
+            }
+            // message.author.send("." + message.content);
+        
+}
+});
+
+//role-retern
+var KinG66S = {};
+client.on('guildMemberRemove', member => {
+KinG66S[member.id] = {roles: member.roles.array()};
+});
+client.on('guildMemberAdd', member => {
+if(!KinG66S[member.user.id]) return;
+console.log(KinG66S[member.user.id].roles.length);
+for(let i = 0; i < KinG66S[member.user.id].roles.length + 1; i++) {
+member.addRole(KinG66S[member.user.id].roles.shift());
+}
+});
 
 //channel-Create
 client.on('channelCreate', cc => {
