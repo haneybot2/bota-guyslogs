@@ -255,7 +255,7 @@ client.on('guildMemberRemove', member => {
 });
 
 //messageDelete
-client.on('guildMemberRemove', message => {
+client.on('messageDelete', message => {
     if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
     const channel = message.guild.channels.find('name', 'log');
     if (!channel) return;
