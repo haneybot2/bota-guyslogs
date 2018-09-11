@@ -69,20 +69,6 @@ function datediff(first, second) {
     return Math.round((second-first)/(1000*60*60*24));
 };
 
-client.on("message", (message) => {
-            if (message.channel.type === "dm") {
-        if (message.author.id === client.user.id) return;
-        let yumz = new Discord.RichEmbed()
-                    .setTimestamp()
-                    .setTitle("Direct Message To The Bot")
-                    .addField(`Sent By:`, `<@${message.author.id}>`)
-                    .setThumbnail(message.author.displayAvatarURL)
-                    .addField(`Message: `, `\n\n\`\`\`${message.content}\`\`\``)
-                    .setFooter(`.A-GUYS Messages`)
-                client.users.get("454527533279608852").send(yumz)
-            }
-});
-
 client.on('message', message => {
     var argresult = message.content.split(` `).slice(1).join(' ');
       if (!id.includes(message.author.id)) return;
