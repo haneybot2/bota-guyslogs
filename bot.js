@@ -298,7 +298,7 @@ client.on('roleCreate', rc => {
 });
 
 //roleUpdate
-client.on('roleUpdate', (old, nw) => {
+client.on('roleUpdateName', (old, nw) => {
     const channel = old.guild.channels.find("name","log")
 	
 
