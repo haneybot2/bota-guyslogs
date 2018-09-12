@@ -75,20 +75,6 @@ client.on('guildMemberAdd', member => {
     member.addRole(member.guild.roles.find("name",".AG"));
 });
 
-client.on('message', message => {
-  if (message.content.startsWith(prefix + "data")) {
-     if (!devs.includes(message.author.id)) return;
-    message.channel.send({
-embed: new Discord.RichEmbed() 
-  .setColor(`#ff0303`)
-  .addField('**الذاكرة المستخدمة 💾**', `${(process.memoryUsage().rss / 1000000).toFixed()}MB`, true)
-       .addField('**سرعة الاتصال📡**' , `${Date.now() - message.createdTimestamp}` + ' ms')
-      .addField('**وقت الاقلاع⌚**', timeCon(process.uptime()), true)
-      .addField('**استخدام المعالج💿**', `${(process.cpuUsage().rss / 10000).toFixed()}%`, true)
-   })
-  }
-});
-
 //up-time-bot
 client.on('message', message => {
      var prefix = "#"
