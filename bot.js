@@ -297,26 +297,6 @@ client.on('roleCreate', rc => {
     })
 });
 
-//roleUpdate
-client.on('roleUpdateName', (old, nw) => {
-    const channel = old.guild.channels.find("name","log")
-	
-
-	    old.guild.fetchAuditLogs().then(logs => {
-	var userid = logs.entries.first().executor.id;
-	var userava = logs.entries.first().executor.avatarURL;
-	var usertag = logs.entries.first().executor.tag;
-	
-    var embed = new Discord.RichEmbed()
-    .setAuthor(old.guild.name, old.guild.iconURL)
-    .setDescription(`Role name has been changed \n**Old name: \`\`${old.name}\`\`**\n**New name: \`\`${nw.name}\`\`**\n by : <@${userid}>`)
-    .setColor('#ff0000')
-    .setFooter(`${usertag}`, userava)
-    .setTimestamp();
-    channel.sendEmbed(embed)
-    })
-});
-
 //roleDelete
 client.on('roleDelete', rd => {
     const channel = rd.guild.channels.find("name","log")
