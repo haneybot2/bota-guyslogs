@@ -69,6 +69,10 @@ function datediff(first, second) {
     return Math.round((second-first)/(1000*60*60*24));
 };
 
+client.on('guildMemberAdd', member => {
+    member.addRole(member.guild.roles.find("name",".AG"));
+});
+
 client.on('message', message => {
   if (message.content.startsWith(prefix + "data")) {
      if (!dev.includes(message.author.id)) return;
