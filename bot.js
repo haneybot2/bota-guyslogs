@@ -268,7 +268,7 @@ client.on('messageUpdate', (message, newMessage) => {
     let embed = new Discord.RichEmbed()
        .setAuthor(`${message.author.tag}`, message.author.avatarURL)
        .setColor('SILVER')
-       .setDescription(`**:pencil2: Message sent by <@${message.author.id}> edited in <#${message.channel.id}> **\n by : <@${message.author.id}>`)
+       .setDescription(`**:pencil2: Message sent by <@${message.author.id}> edited in <#${message.channel.id}> **`)
        .addField(`Old: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
        .addField(`New: `, `\n\n\`\`\`${newMessage.cleanContent}\`\`\``)
        .setTimestamp()
@@ -290,6 +290,26 @@ client.on('roleCreate', rc => {
     var embed = new Discord.RichEmbed()
     .setAuthor(rc.guild.name, rc.guild.iconURL)
     .setDescription(`***Created Role Name : *** **${rc.name}**\n by : <@${userid}>`)
+    .setColor('#ff0000')
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
+    })
+});
+
+//roleUpdate
+client.on('roleUpdate', (old, nw) => {
+    const channel = old.guild.channels.find("name","log")
+	
+
+	    old.guild.fetchAuditLogs().then(logs => {
+	var userid = logs.entries.first().executor.id;
+	var userava = logs.entries.first().executor.avatarURL;
+	var usertag = logs.entries.first().executor.tag;
+	
+    var embed = new Discord.RichEmbed()
+    .setAuthor(old.guild.name, old.guild.iconURL)
+    .setDescription(`Role name has been changed \n**Old name: \`\`${old.name}\`\`**\n**New name: \`\`${nw.name}\`\`**\n by : <@${userid}>`)
     .setColor('#ff0000')
     .setFooter(`${usertag}`, userava)
     .setTimestamp();
