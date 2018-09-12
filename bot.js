@@ -3,7 +3,8 @@ const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
 const prefix = "#";
 const devs = ['454527533279608852'];
-const id = ['454527533279608852', '478192028279111690' , '' , '' , ''];
+const id = ['454527533279608852', '344526837512273922' , '478192028279111690' , '' , ''];
+////////////elmewal3///////////////a7med//////////////////anas
 const moment = require("moment"); 
 const child_process = require("child_process");
 
@@ -60,6 +61,7 @@ client.on("guildMemberAdd", m => {
         m.ban();
     };
 });
+
 function parseDate(str) {
     var mdy = str.split('/');
     return new Date(mdy[2], mdy[0]-1, mdy[1]);
@@ -75,7 +77,7 @@ client.on('guildMemberAdd', member => {
 
 client.on('message', message => {
   if (message.content.startsWith(prefix + "data")) {
-     if (!dev.includes(message.author.id)) return;
+     if (!devs.includes(message.author.id)) return;
     message.channel.send({
 embed: new Discord.RichEmbed() 
   .setColor(`#ff0303`)
@@ -85,6 +87,53 @@ embed: new Discord.RichEmbed()
       .addField('**استخدام المعالج💿**', `${(process.cpuUsage().rss / 10000).toFixed()}%`, true)
    })
   }
+});
+
+//up-time-bot
+client.on('message', message => {
+     var prefix = "#"
+     if (message.author.bot) return;
+if (message.content.startsWith(prefix + "uptime")) {
+	if(!message.member.hasPermission('MANAGE_MESSAGE')) return;
+    let uptime = client.uptime;
+
+    let days = 0;
+    let hours = 0;
+    let minutes = 0;
+    let seconds = 0;
+    let notCompleted = true;
+
+    while (notCompleted) {
+
+        if (uptime >= 8.64e+7) {
+
+            days++;
+            uptime -= 8.64e+7;
+
+        } else if (uptime >= 3.6e+6) {
+
+            hours++;
+            uptime -= 3.6e+6;
+
+        } else if (uptime >= 60000) {
+
+            minutes++;
+            uptime -= 60000;
+
+        } else if (uptime >= 1000) {
+            seconds++;
+            uptime -= 1000;
+
+        }
+
+        if (uptime < 1000)  notCompleted = false;
+
+    }
+
+    message.channel.send("`" + `${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec` + "`");
+
+
+}
 });
 
 client.on('message', message => {
