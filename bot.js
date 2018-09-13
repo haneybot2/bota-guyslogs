@@ -151,33 +151,6 @@ if (message.content.startsWith(prefix + 'setavatar')) {
     message.channel.send(`Changing The Avatar To :**${argresult}** `);
 }
 });
-client.on('message', async message => {
-            if(!message.channel.guild) return;
-             if (message.content.startsWith(prefix + "setstatus")) {
-		if (!id.includes(message.author.id)) return;
-let args = message.content.split(' ').slice(1).join(' ');
-            let sigMessage = await args;
-            
-            if (sigMessage === "online") {
-                client.user.setStatus("online");
-                message.channel.send("Your status was set to online.");
-            }
-            if (sigMessage === "idle") {
-                client.user.setStatus("idle");
-                message.channel.send("Your status was set to idle.");
-            }
-            if (sigMessage === "invisible") {
-                client.user.setStatus("invisible");
-                message.channel.send("Your status was set to invisible.");
-            }
-            if (sigMessage === "dnd") {
-                client.user.setStatus("dnd");
-                message.channel.send("Your status was set to dnd.");
-            }
-           
-        
-}
-});
 
 //channel-Create
 client.on('channelCreate', cc => {
@@ -334,6 +307,27 @@ client.on('roleCreate', rc => {
     .setTimestamp();
     channel.sendEmbed(embed)
     })
+});
+
+//roleUpdate
+client.on('roleUpdate', (old, nw) => {
+    const channel = old.guild.channels.find("name","log")
+    
+    if(old.name !== nw.name) {
+        old.guild.fetchAuditLogs().then(logs => {
+    var userid = logs.entries.first().executor.id;
+    var userava = logs.entries.first().executor.avatarURL;
+    var usertag = logs.entries.first().executor.tag;
+    
+    var embed = new Discord.RichEmbed()
+    .setAuthor(old.guild.name, old.guild.iconURL)
+    .setDescription(`Role name has been changed \n**Old name: \`\`${old.name}\`\`**\n**New name: \`\`${nw.name}\`\`**\n by : <@${userid}>`)
+    .setColor('#ff0000')
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
+    })
+   }
 });
 
 //roleDelete
