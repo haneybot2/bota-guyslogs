@@ -253,6 +253,49 @@ client.on('guildMemberRemove', member => {
      channel.send({embed:embed});
 });
 
+//guildMemberUpdate
+client.on('guildMemberUpdate', (oldm, newm) => {
+	const channel = oldm.guild.channels.find("name","log")
+	if (oldm.roles.size !== newm.roles.size) {
+		
+    if (oldm.roles.size > newm.roles.size) {
+		
+	oldm.guild.fetchAuditLogs().then(logs => {
+    var userid = logs.entries.first().executor.id;
+    var userava = logs.entries.first().executor.avatarURL;
+    var usertag = logs.entries.first().executor.tag;
+	let dif = oldm.roles.filter(r => !newm.roles.has(r.id)).first()
+    
+    var embed = new Discord.RichEmbed()
+    .setAuthor(oldm.user.tag, oldm.user.avatarURL)
+    .setDescription(`**:x: <@${oldm.id}> was removed from the \`\`${dif.name}\`\` role** by : <@${userid}>`)
+    .setColor('#ff0000')
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
+    })
+        
+    } else if (oldm.roles.size < newm.roles.size) {
+	
+       
+	oldm.guild.fetchAuditLogs().then(logs => {
+    var userid = logs.entries.first().executor.id;
+    var userava = logs.entries.first().executor.avatarURL;
+    var usertag = logs.entries.first().executor.tag;
+	let dif = newm.roles.filter(r => !oldm.roles.has(r.id)).first()
+    
+    var embed = new Discord.RichEmbed()
+    .setAuthor(oldm.user.tag, oldm.user.avatarURL)
+    .setDescription(`**:white_check_mark:  <@${newm.id}> was given the \`\`${dif.name}\`\` role** by : <@${userid}>`)
+    .setColor('#ff0000')
+    .setFooter(`${usertag}`, userava)
+    .setTimestamp();
+    channel.sendEmbed(embed)
+    })
+    };
+	}
+});
+
 //messageDelete
 client.on('messageDelete', message => {
     if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
