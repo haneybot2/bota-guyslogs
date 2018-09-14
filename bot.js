@@ -534,6 +534,13 @@ client.on('voiceStateUpdate', (oldM, newM) => {
        ch.send(embed4)
     }
   })
+	
+  const channel = client.channels.get('471810322601345024');
+  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
+  const size = channel.name.match(/\[\s(\d+)\s\]/);
+  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
+  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
+	
 });
 
 client.login(process.env.BOT_TOKEN);
