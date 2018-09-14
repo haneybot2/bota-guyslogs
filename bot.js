@@ -154,7 +154,7 @@ if (message.content.startsWith(prefix + 'setavatar')) {
 
 //channel-Create
 client.on('channelCreate', cc => {
-    const channel = cc.guild.channels.find("name","log")
+    const channel = cc.guild.channels.find(c => c.name === 'log');
 	
 	if(cc.type === 'text') {
         var roomType = ':pencil: #';
@@ -181,9 +181,44 @@ client.on('channelCreate', cc => {
    })
 });
 
+//channelUpdate
+client.on('channelUpdate', (oldChannel, newChannel) => {
+    if(!oldChannel.guild) return;
+ 
+    var logChannel = oldChannel.guild.channels.find(c => c.name === 'log');
+    if(!logChannel) return;
+ 
+    if(oldChannel.type === 'text') {
+        var channelType = 'Text';
+    }else
+    if(oldChannel.type === 'voice') {
+        var channelType = 'Voice';
+    }else
+    if(oldChannel.type === 'category') {
+        var channelType = 'Category';
+    }
+ 
+    oldChannel.guild.fetchAuditLogs().then(logs => {
+        var userID = logs.entries.first().executor.id;
+        var userAvatar = logs.entries.first().executor.avatarURL;
+	var usertag = logs.entries.first().executor.tag;
+ 
+        if(oldChannel.name !== newChannel.name) {
+            let newName = new Discord.RichEmbed()
+            .setAuthor(oldChannel.guild.name, oldChannel.guild.iconURL)
+            .setColor('#ff0000')
+            .setDescription(`**${channelType} channel name has been changed **\n**Old Name: \`\`${oldChannel.name}\`\`**\n**New Name: \`\`${newChannel.name}\`\`**\n by : <@${userID}>`)
+            .setFooter(`${usertag}`, userAvatar)
+            .setTimestamp()
+ 
+            logChannel.send(newName);
+        }
+    })
+});
+
 //channel-Delete
 client.on('channelDelete', dc => {
-    const channel = dc.guild.channels.find("name","log")
+    const channel = dc.guild.channels.find(c => c.name === 'log');
 	
 	if(dc.type === 'text') {
         var roomType = ':pencil: #';
@@ -213,7 +248,7 @@ client.on('channelDelete', dc => {
 //guild-Member-Add
 client.on('guildMemberAdd', member => {
 
-     const join =  member.guild.channels.find('name', 'log');
+     const join =  member.guild.channels.find(c => c.name === 'log');
      
     if(!join) return;
       if(join) {
@@ -237,7 +272,7 @@ client.on('guildMemberRemove', member => {
     if (!member || !member.id || !member.guild || !member.guild) return;
     const guild = member.guild;
 	
-    const channel = member.guild.channels.find('name', 'log');
+    const channel = member.guild.channels.find(c => c.name === 'log');
     if (!channel) return;
     let memberavatar = member.user.avatarURL
     const fromNow = moment(member.joinedTimestamp).fromNow();
@@ -245,7 +280,7 @@ client.on('guildMemberRemove', member => {
 	var m = member.user;
     let embed = new Discord.RichEmbed()
        .setAuthor(`${member.user.tag}`, member.user.avatarURL)
-	   .setThumbnail(memberavatar)
+       .setThumbnail(memberavatar)
        .setColor('BLACK')
        .setDescription(`:arrow_upper_left:  <@${member.user.id}> **Leave From Server**\n\n`)
        .setTimestamp()
@@ -255,7 +290,7 @@ client.on('guildMemberRemove', member => {
 
 //guildMemberUpdate
 client.on('guildMemberUpdate', (oldm, newm) => {
-	const channel = oldm.guild.channels.find("name","log")
+	const channel = oldm.guild.channels.find(c => c.name === 'log');
 	if (oldm.roles.size !== newm.roles.size) {
 		
     if (oldm.roles.size > newm.roles.size) {
@@ -264,7 +299,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     var userid = logs.entries.first().executor.id;
     var userava = logs.entries.first().executor.avatarURL;
     var usertag = logs.entries.first().executor.tag;
-	let dif = oldm.roles.filter(r => !newm.roles.has(r.id)).first()
+    let dif = oldm.roles.filter(r => !newm.roles.has(r.id)).first()
     
     var embed = new Discord.RichEmbed()
     .setAuthor(oldm.user.tag, oldm.user.avatarURL)
@@ -282,7 +317,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     var userid = logs.entries.first().executor.id;
     var userava = logs.entries.first().executor.avatarURL;
     var usertag = logs.entries.first().executor.tag;
-	let dif = newm.roles.filter(r => !oldm.roles.has(r.id)).first()
+    let dif = newm.roles.filter(r => !oldm.roles.has(r.id)).first()
     
     var embed = new Discord.RichEmbed()
     .setAuthor(oldm.user.tag, oldm.user.avatarURL)
@@ -296,28 +331,81 @@ client.on('guildMemberUpdate', (oldm, newm) => {
 	}
 });
 
+//guildBanAdd
+client.on('guildBanAdd', (guild, user) => {
+ 
+ 
+    var logChannel = guild.channels.find(c => c.name === 'log');
+    if(!logChannel) return;
+ 
+    guild.fetchAuditLogs().then(logs => {
+        var userID = logs.entries.first().executor.id;
+        var userAvatar = logs.entries.first().executor.avatarURL;
+	var usertag = logs.entries.first().executor.tag;
+ 
+        if(userID === client.user.id) return;
+ 
+        let banInfo = new Discord.RichEmbed()
+        .setAuthor(user.tag, user.avatarURL)
+        .setThumbnail(user.avatarURL)
+        .setColor('#ff0000')
+        .setDescription(`**:airplane: <@${user.id}> banned from the server**\nby : <@${userid}>`)
+        .setFooter(`${usertag}`, userAvatar)
+	.setTimestamp()
+ 
+        logChannel.send(banInfo);
+    })
+});
+
+//guildBanRemove
+client.on('guildBanRemove', (guild, user) => {
+ 
+    var logChannel = guild.channels.find(c => c.name === 'log');
+    if(!logChannel) return;
+ 
+    guild.fetchAuditLogs().then(logs => {
+        var userID = logs.entries.first().executor.id;
+        var userAvatar = logs.entries.first().executor.avatarURL;
+	var usertag = logs.entries.first().executor.tag;
+ 
+        let unBanInfo = new Discord.RichEmbed()
+        .setAuthor(user.tag, user.avatarURL)
+        .setThumbnail(user.avatarURL)
+        .setColor('#ff0000')
+        .setDescription(`**:blue_car: The ban of <@${user.id}> has been removed**\nby : <@${userid}>`)
+        .setFooter(`${usertag}`, userAvatar)
+		.setTimestamp()
+ 
+        logChannel.send(unBanInfo);
+    })
+});
+
 //messageDelete
 client.on('messageDelete', message => {
     if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
-    const channel = message.guild.channels.find('name', 'log');
+    const channel = message.guild.channels.find(c => c.name === 'log');
     if (!channel) return;
+	
+	message.guild.fetchAuditLogs().then(logs => {
+	var userid = logs.entries.first().executor.id;
+	var userava = logs.entries.first().executor.avatarURL;
+	var usertag = logs.entries.first().executor.tag;
     
     let embed = new Discord.RichEmbed()
        .setAuthor(`${message.author.tag}`, message.author.avatarURL)
        .setColor('BLACK')
-       .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**\n by : <@${message.author.id}>`)
+       .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**\n by : <@${userid}>`)
        .addField(`Message: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
        .setTimestamp()
-       .setFooter(message.author.username, message.author.avatarURL);
+       .setFooter(`${usertag}`, userava);
      channel.send({embed:embed});
-
+	})
 });
 
 //messageUpdate
 client.on('messageUpdate', (message, newMessage) => {
-    if (message.content === newMessage.content) return;
     if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
-    const channel = message.guild.channels.find('name', 'log');
+    const channel = message.guild.channels.find(c => c.name === 'log');
     if (!channel) return;
 
     let embed = new Discord.RichEmbed()
@@ -327,7 +415,7 @@ client.on('messageUpdate', (message, newMessage) => {
        .addField(`Old: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
        .addField(`New: `, `\n\n\`\`\`${newMessage.cleanContent}\`\`\``)
        .setTimestamp()
-       .setFooter(message.author.username, message.author.avatarURL);
+       .setFooter(message.author.tag, message.author.avatarURL);
      channel.send({embed:embed});
 
 
@@ -335,7 +423,7 @@ client.on('messageUpdate', (message, newMessage) => {
 
 //roleCreate
 client.on('roleCreate', rc => {
-    const channel = rc.guild.channels.find("name","log")
+    const channel = rc.guild.channels.find(c => c.name === 'log');
 	
 	    rc.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -354,7 +442,7 @@ client.on('roleCreate', rc => {
 
 //roleUpdate
 client.on('roleUpdate', (old, nw) => {
-    const channel = old.guild.channels.find("name","log")
+    const channel = old.guild.channels.find(c => c.name === 'log');
     
     if(old.name !== nw.name) {
         old.guild.fetchAuditLogs().then(logs => {
@@ -375,7 +463,7 @@ client.on('roleUpdate', (old, nw) => {
 
 //roleDelete
 client.on('roleDelete', rd => {
-    const channel = rd.guild.channels.find("name","log")
+    const channel = rd.guild.channels.find(c => c.name === 'log');
 	
 	    rd.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -398,7 +486,7 @@ client.on('voiceStateUpdate', (oldM, newM) => {
   let rebel2 = newM.serverMute;
   let codes1 = oldM.serverDeaf;
   let codes2 = newM.serverDeaf;
-  let ch = oldM.guild.channels.find('name', 'log')
+  let ch = oldM.guild.channels.find(c => c.name === 'log');
   if(!ch) return;
     oldM.guild.fetchAuditLogs()
     .then(logs => {
