@@ -7,7 +7,7 @@ const id = ['454527533279608852', '344526837512273922' , '478192028279111690' , 
 ////////////elmewal3///////////////a7med//////////////////anas
 const moment = require("moment"); 
 const child_process = require("child_process");
-const Canvas = require("canvas");
+const Canvas = require('canvas');
 
 //console
 client.on('ready', () => {
