@@ -7,6 +7,7 @@ const id = ['454527533279608852', '344526837512273922' , '478192028279111690' , 
 ////////////elmewal3///////////////a7med//////////////////anas
 const moment = require("moment"); 
 const child_process = require("child_process");
+const Canvas = require("canvas");
 
 //console
 client.on('ready', () => {
@@ -487,6 +488,12 @@ client.on('voiceStateUpdate', (oldM, newM) => {
   let codes1 = oldM.serverDeaf;
   let codes2 = newM.serverDeaf;
   let ch = oldM.guild.channels.find(c => c.name === 'log');
+  const channel = client.channels.get('471810322601345024');
+  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
+  const size = channel.name.match(/\[\s(\d+)\s\]/);
+  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
+  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
+	
   if(!ch) return;
     oldM.guild.fetchAuditLogs()
     .then(logs => {
@@ -534,13 +541,6 @@ client.on('voiceStateUpdate', (oldM, newM) => {
        ch.send(embed4)
     }
   })
-	
-  const channel = client.channels.get('471810322601345024');
-  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
-  const size = channel.name.match(/\[\s(\d+)\s\]/);
-  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
-  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
-	
 });
 
 client.login(process.env.BOT_TOKEN);
