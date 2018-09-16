@@ -37,24 +37,28 @@ client.on('ready', () => {
 //restart-bot
       client.on('message', message => {
         var argresult = message.content.split(` `).slice(1).join(' ');
-           
-	      
-	 if (message.content === (prefix + "levebot")) {
+          if (!devs.includes(message.author.id)) return;
+          
+        if (message.content === (prefix + "levebot")) {
         message.guild.leave();        
-      } else   
+      } else     
         if(message.content === prefix + "restart") {
           if (!devs.includes(message.author.id)) return;
-	    message.channel.send(`:white_check_mark: **restarting**`);
+            message.channel.send(`:white_check_mark: **Bot restarting** !`);
             console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             console.log(`⚠️ Bot restarting... ⚠️`);
             console.log("===============================================\n\n");
             client.destroy();
             child_process.fork(__dirname + "/bot.js");
             console.log(`Bot Successfully Restarted`);
-        }
-      
-      });
+        } else
+	 if(message.content === (prefix + "shutdown")) {
+           if (!devs.includes(message.author.id)) return;
+           message.channel.send(':warning: **Bot Shutdown**')
+           process.kill(process.pid)
+        } else return;
 
+      });
 //حمايه
 client.on("guildMemberAdd", m => {
     if (datediff(parseDate(moment(m.user.createdTimestamp).format('l')), parseDate(moment().format('l'))) < 8) {
