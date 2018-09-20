@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
-const prefix = "#";
-const devs = ['454527533279608852'];
-const id = ['454527533279608852', '344526837512273922' , '478192028279111690' , '' , ''];
+const prefix = process.env.prefix
+const devs = [process.env.id1];
+const id = [process.env.id1 , process.env.id2 , process.env.id3];
 ////////////elmewal3///////////////a7med//////////////////anas
 const moment = require("moment"); 
 const child_process = require("child_process");
