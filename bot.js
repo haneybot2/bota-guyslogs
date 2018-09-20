@@ -494,59 +494,92 @@ client.on('roleDelete', rd => {
 });
 
 //voiceStateUpdate
-client.on('voiceStateUpdate', (oldM, newM) => {
-  let rebel1 = oldM.serverMute;
-  let rebel2 = newM.serverMute;
-  let codes1 = oldM.serverDeaf;
-  let codes2 = newM.serverDeaf;
-  let ch = oldM.guild.channels.find(c => c.name === 'log');
-  if(!ch) return;
-    oldM.guild.fetchAuditLogs()
-    .then(logs => {
-      let user = logs.entries.first().executor.tag;
-      let userid = logs.entries.first().executor.id;
-	  let useravatar = logs.entries.first().executor.avatarURL;
-    if(rebel1 === false && rebel2 === true) {
-       let embed1 = new Discord.RichEmbed()
-	   .setThumbnail(`http://i8.ae/1FAa5`)
-       .setAuthor(`${newM.user.tag}`, newM.user.avatarURL)
-       .setDescription(`:microphone: **${newM} has been muted **By : <@${userid}>`)
-	   .setFooter(`${user}`, useravatar)
-       .setColor('#ff0000')
-	   .setTimestamp()
-       ch.send(embed1)
-    }
-    if(rebel1 === true && rebel2 === false) {
-       let embed2 = new Discord.RichEmbed()
-	   .setThumbnail(`http://i8.ae/Ohlud`)
-       .setAuthor(`${newM.user.tag}`, newM.user.avatarURL)
-       .setDescription(`:microphone: **${newM} has been unmuted **By : <@${userid}>`)
-	   .setFooter(`${user}`, useravatar)
-       .setColor('#ff0000')
-       .setTimestamp()
-       ch.send(embed2)
-    }
-    if(codes1 === false && codes2 === true) {
-       let embed3 = new Discord.RichEmbed()
-	   .setThumbnail(`http://i8.ae/UufuL`)
-       .setAuthor(`${newM.user.tag}`, newM.user.avatarURL)
-       .setDescription(`:mute: **${newM} has been deafen **By : <@${userid}>`)
-	   .setFooter(`${user}`, useravatar)
-       .setColor('#ff0000')
-       .setTimestamp()
-       ch.send(embed3)
-    }
-    if(codes1 === true && codes2 === false) {
-       let embed4 = new Discord.RichEmbed()
-	   .setThumbnail(`http://i8.ae/QNzaT`)
-       .setAuthor(`${newM.user.tag}`, newM.user.avatarURL)
-       .setDescription(`:headphones: **${newM} has been undeafen **By : <@${userid}>`)
-	   .setFooter(`${user}`, useravatar)
-       .setColor('#ff0000')
-       .setTimestamp()
-       ch.send(embed4)
-    }
+client.on('voiceStateUpdate', (voiceOld, voiceNew) => {
+ 
+  if(!voiceOld.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
+  if(!voiceOld.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
+
+  var logChannel = voiceOld.guild.channels.find(c => c.name === 'log');
+  if(!logChannel) return;
+
+  voiceOld.guild.fetchAuditLogs().then(logs => {
+    let user = logs.entries.first().executor.tag;
+    let userid = logs.entries.first().executor.id;
+    let useravatar = logs.entries.first().executor.avatarURL;
+
+// Server Muted Voice
+      if(voiceOld.serverMute === false && voiceNew.serverMute === true) {
+          let serverMutev = new Discord.RichEmbed()
+          .setThumbnail(`http://i8.ae/Rp5g5`)
+          .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+          .setDescription(`:microphone: **${voiceOld} has been muted **By : <@${userid}>`)
+          .setFooter(`${user}`, useravatar)
+          .setColor('#ff0000')
+          .setTimestamp()
+
+          logChannel.send(serverMutev);
+      }
+// Server UnMuted Voice
+      if(voiceOld.serverMute === true && voiceNew.serverMute === false) {
+          let serverUnmutev = new Discord.RichEmbed()
+          .setThumbnail(`http://i8.ae/iR3rK`)
+          .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+          .setDescription(`:microphone: **${newM} has been unmuted **By : <@${userid}>`)
+          .setFooter(`${user}`, useravatar)
+          .setColor('#ff0000')
+          .setTimestamp()
+
+          logChannel.send(serverUnmutev);
+      }
+// Server Deafen Voice
+      if(voiceOld.serverDeaf === false && voiceNew.serverDeaf === true) {
+          let serverDeafv = new Discord.RichEmbed()
+          .setThumbnail(`http://i8.ae/5dBeC`)
+          .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+          .setDescription(`:mute: **${newM} has been deafen **By : <@${userid}>`)
+          .setFooter(`${user}`, useravatar)
+          .setColor('#ff0000')
+          .setTimestamp()
+
+          logChannel.send(serverDeafv);
+      }
+// Server UnDeafen Voice
+      if(voiceOld.serverDeaf === true && voiceNew.serverDeaf === false) {
+          let serverUndeafv = new Discord.RichEmbed()
+          .setThumbnail(`http://i8.ae/XEgMM`)
+          .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+          .setDescription(`:headphones: **${newM} has been undeafen **By : <@${userid}>`)
+          .setFooter(`${user}`, useravatar)
+          .setColor('#ff0000')
+          .setTimestamp()
+
+          logChannel.send(serverUndeafv);
+      }
   })
+// Join Voice Channel
+  if(voiceOld.voiceChannelID !== voiceNew.voiceChannelID && !voiceOld.voiceChannel) {
+      let voiceJoin = new Discord.RichEmbed()
+      .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+      .setThumbnail(voiceOld.user.avatarURL)
+      .setDescription(`**:arrow_lower_right: <@${voiceOld.id}> has been Join From \`\`${voiceNew.voiceChannel.name}\`\`.**`)
+      .setFooter(voiceOld.user.tag, voiceOld.user.avatarURL)
+      .setColor('#ff0000')
+      .setTimestamp()
+
+      logChannel.send(voiceJoin);
+  }
+// Leave Voice Channel
+  if(voiceOld.voiceChannelID !== voiceNew.voiceChannelID && !voiceNew.voiceChannel) {
+      let voiceLeave = new Discord.RichEmbed()
+      .setAuthor(`${voiceOld.user.tag}`, voiceOld.user.avatarURL)
+      .setThumbnail(voiceOld.user.avatarURL)
+      .setDescription(`**:arrow_upper_left: <@${voiceOld.id}> has been Leave From \`\`${voiceOld.voiceChannel.name}\`\`.**`)
+      .setFooter(voiceOld.user.tag, voiceOld.user.avatarURL)
+      .setColor('#ff0000')
+      .setTimestamp()
+
+      logChannel.send(voiceLeave);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
