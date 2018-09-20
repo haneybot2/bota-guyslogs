@@ -79,6 +79,15 @@ client.on('guildMemberAdd', member => {
     member.addRole(member.guild.roles.find("name",".AG"));
 });
 
+//voise online
+client.on('voiceStateUpdate', (old, now) => {
+  const channel = client.channels.get('471810322601345024');
+  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
+  const size = channel.name.match(/\[\s(\d+)\s\]/);
+  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
+  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
+});
+
 //up-time-bot
 client.on('message', message => {
      var prefix = "#"
@@ -491,12 +500,6 @@ client.on('voiceStateUpdate', (oldM, newM) => {
   let codes1 = oldM.serverDeaf;
   let codes2 = newM.serverDeaf;
   let ch = oldM.guild.channels.find(c => c.name === 'log');
-  const channel = client.channels.get('471810322601345024');
-  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
-  const size = channel.name.match(/\[\s(\d+)\s\]/);
-  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
-  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
-	
   if(!ch) return;
     oldM.guild.fetchAuditLogs()
     .then(logs => {
