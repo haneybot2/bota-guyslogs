@@ -398,7 +398,7 @@ client.on('messageDelete', message => {
     let messageDelete = new Discord.RichEmbed()
        .setAuthor(`${message.author.tag}`, message.author.avatarURL)
        .setColor('BLACK')
-       .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**\n by : <@${userid}>`)
+       .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**`)
        .addField(`Message: `, `\n\n\`\`\`${message}\`\`\``)
        .setTimestamp()
        .setFooter(`${message.author.tag}`, message.author.avatarURL);
@@ -423,7 +423,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
        .setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
        .setColor('SILVER')
        .setDescription(`**:pencil2: Message sent by <@${oldMessage.author.id}> edited in <#${oldMessage.channel.id}> **`)
-       .addField(`Old: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
+       .addField(`Old: `, `\n\n\`\`\`${oldMessage.cleanContent}\`\`\``)
        .addField(`New: `, `\n\n\`\`\`${newMessage.cleanContent}\`\`\``)
        .setTimestamp()
        .setFooter(oldMessage.guild.name, oldMessage.guild.iconURL);
