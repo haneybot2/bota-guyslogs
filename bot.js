@@ -426,7 +426,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
        .addField(`Old: `, `\n\n\`\`\`${oldMessage.cleanContent}\`\`\``)
        .addField(`New: `, `\n\n\`\`\`${newMessage.cleanContent}\`\`\``)
        .setTimestamp()
-       .setFooter(oldMessage.guild.name, oldMessage.guild.iconURL);
+       .setFooter(oldMessage.author.tag, oldMessage.author.avatarURL);
  
     logChannel.send(messageUpdate);
 });
