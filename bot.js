@@ -395,7 +395,6 @@ client.on('guildBanRemove', (guild, user) => {
 
 //messageDelete
 client.on('messageDelete', message => {
-    if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
     const channel = message.guild.channels.find(c => c.name === 'log');
     if (!channel) return;
 	
@@ -408,7 +407,7 @@ client.on('messageDelete', message => {
        .setAuthor(`${message.author.tag}`, message.author.avatarURL)
        .setColor('BLACK')
        .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**\n by : <@${userid}>`)
-       .addField(`Message: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
+       .addField(`Message: `, `\n\n\`\`\`${message}\`\`\``)
        .setTimestamp()
        .setFooter(`${usertag}`, userava);
      channel.send({embed:embed});
@@ -417,7 +416,6 @@ client.on('messageDelete', message => {
 
 //messageUpdate
 client.on('messageUpdate', (message, newMessage) => {
-    if (!message || !message.id || !message.content || !message.guild || message.author.bot) return;
     const channel = message.guild.channels.find(c => c.name === 'log');
     if (!channel) return;
 
