@@ -386,41 +386,49 @@ client.on('guildBanRemove', (guild, user) => {
 
 //messageDelete
 client.on('messageDelete', message => {
-    const channel = message.guild.channels.find(c => c.name === 'log');
-    if (!channel) return;
-	
-	message.guild.fetchAuditLogs().then(logs => {
-	var userid = logs.entries.first().executor.id;
-	var userava = logs.entries.first().executor.avatarURL;
-	var usertag = logs.entries.first().executor.tag;
-    
-    let embed = new Discord.RichEmbed()
+ 
+    if(message.author.bot) return;
+    if(message.channel.type === 'dm') return;
+    if(!message.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
+    if(!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
+ 
+    var logChannel = message.guild.channels.find(c => c.name === 'log');
+    if(!logChannel) return;
+ 
+    let messageDelete = new Discord.RichEmbed()
        .setAuthor(`${message.author.tag}`, message.author.avatarURL)
        .setColor('BLACK')
        .setDescription(`**:wastebasket: Message sent by <@${message.author.id}> deleted in <#${message.channel.id}>**\n by : <@${userid}>`)
        .addField(`Message: `, `\n\n\`\`\`${message}\`\`\``)
        .setTimestamp()
-       .setFooter(`${usertag}`, userava);
-     channel.send({embed:embed});
-	})
+       .setFooter(`${message.author.tag}`, message.author.avatarURL);
+ 
+    logChannel.send(messageDelete);
 });
 
 //messageUpdate
-client.on('messageUpdate', (message, newMessage) => {
-    const channel = message.guild.channels.find(c => c.name === 'log');
-    if (!channel) return;
-
-    let embed = new Discord.RichEmbed()
-       .setAuthor(`${message.author.tag}`, message.author.avatarURL)
+client.on('messageUpdate', (oldMessage, newMessage) => {
+ 
+    if(oldMessage.author.bot) return;
+    if(!oldMessage.channel.type === 'dm') return;
+    if(!oldMessage.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
+    if(!oldMessage.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
+ 
+    var logChannel = oldMessage.guild.channels.find(c => c.name === 'log');
+    if(!logChannel) return;
+ 
+    if(oldMessage.content.startsWith('https://')) return;
+ 
+    let messageUpdate = new Discord.RichEmbed()
+       .setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
        .setColor('SILVER')
-       .setDescription(`**:pencil2: Message sent by <@${message.author.id}> edited in <#${message.channel.id}> **`)
+       .setDescription(`**:pencil2: Message sent by <@${oldMessage.author.id}> edited in <#${oldMessage.channel.id}> **`)
        .addField(`Old: `, `\n\n\`\`\`${message.cleanContent}\`\`\``)
        .addField(`New: `, `\n\n\`\`\`${newMessage.cleanContent}\`\`\``)
        .setTimestamp()
-       .setFooter(message.author.tag, message.author.avatarURL);
-     channel.send({embed:embed});
-
-
+       .setFooter(oldMessage.guild.name, oldMessage.guild.iconURL);
+ 
+    logChannel.send(messageUpdate);
 });
 
 //roleCreate
