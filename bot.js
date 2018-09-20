@@ -79,15 +79,6 @@ client.on('guildMemberAdd', member => {
     member.addRole(member.guild.roles.find("name",".AG"));
 });
 
-//voise online
-client.on('voiceStateUpdate', (old, now) => {
-  const channel = client.channels.get('471810322601345024');
-  const currentSize = channel.guild.members.filter(m => m.voiceChannel).size;
-  const size = channel.name.match(/\[\s(\d+)\s\]/);
-  if (!size) return channel.setName(`.AG Online: [${currentSize}]`);
-  if (currentSize !== size) channel.setName(`Voice Online: [${currentSize}]`);
-});
-
 //up-time-bot
 client.on('message', message => {
      var prefix = "#"
