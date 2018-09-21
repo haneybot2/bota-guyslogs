@@ -5,6 +5,7 @@ const prefix = process.env.prefix
 const devs = [process.env.id1];
 const id = [process.env.id1 , process.env.id2 , process.env.id3];
 ////////////elmewal3///////////////a7med//////////////////anas
+const fs = module.require("fs"); 
 const moment = require("moment"); 
 const child_process = require("child_process");
 let logs = JSON.parse(fs.readFileSync(`./logs.json`, `utf8`)); 
