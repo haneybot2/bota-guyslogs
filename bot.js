@@ -171,7 +171,7 @@ client.on('message', message => {
 client.on('message', message => {
 //channel-Create
 client.on('channelCreate', cc => {
-    const channel = cc.guild.channels.find(c => c.name === 'log');
+    const channel = cc.guild.channels.find("name", logs[message.guild.id].channel)
 	
 	if(cc.type === 'text') {
         var roomType = ':pencil: #';
@@ -202,7 +202,7 @@ client.on('channelCreate', cc => {
 client.on('channelUpdate', (oldChannel, newChannel) => {
     if(!oldChannel.guild) return;
  
-    var logChannel = oldChannel.guild.channels.find(c => c.name === 'log');
+    var logChannel = oldChannel.guild.channels.find("name", logs[message.guild.id].channel)
     if(!logChannel) return;
  
     if(oldChannel.type === 'text') {
@@ -235,7 +235,7 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 
 //channel-Delete
 client.on('channelDelete', dc => {
-    const channel = dc.guild.channels.find(c => c.name === 'log');
+    const channel = dc.guild.channels.find("name", logs[message.guild.id].channel)
 	
 	if(dc.type === 'text') {
         var roomType = ':pencil: #';
@@ -265,7 +265,7 @@ client.on('channelDelete', dc => {
 //guild-Member-Add
 client.on('guildMemberAdd', member => {
 
-     const join =  member.guild.channels.find(c => c.name === 'log');
+     const join =  member.guild.channels.find("name", logs[message.guild.id].channel)
      
     if(!join) return;
       if(join) {
@@ -289,7 +289,7 @@ client.on('guildMemberRemove', member => {
     if (!member || !member.id || !member.guild || !member.guild) return;
     const guild = member.guild;
 	
-    const channel = member.guild.channels.find(c => c.name === 'log');
+    const channel = member.guild.channels.find("name", logs[message.guild.id].channel)
     if (!channel) return;
     let memberavatar = member.user.avatarURL
     const fromNow = moment(member.joinedTimestamp).fromNow();
@@ -307,7 +307,7 @@ client.on('guildMemberRemove', member => {
 
 //guildMemberUpdate
 client.on('guildMemberUpdate', (oldm, newm) => {
-	const channel = oldm.guild.channels.find(c => c.name === 'log');
+	const channel = oldm.guild.channels.find("name", logs[message.guild.id].channel)
 	if (oldm.roles.size !== newm.roles.size) {
 		
     if (oldm.roles.size > newm.roles.size) {
@@ -352,7 +352,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
 client.on('guildBanAdd', (guild, user) => {
  
  
-    var logChannel = guild.channels.find(c => c.name === 'log');
+    var logChannel = guild.channels.find("name", logs[message.guild.id].channel)
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
@@ -377,7 +377,7 @@ client.on('guildBanAdd', (guild, user) => {
 //guildBanRemove
 client.on('guildBanRemove', (guild, user) => {
  
-    var logChannel = guild.channels.find(c => c.name === 'log');
+    var logChannel = guild.channels.find("name", logs[message.guild.id].channel)
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
@@ -405,7 +405,7 @@ client.on('messageDelete', message => {
     if(!message.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
     if(!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
  
-    var logChannel = message.guild.channels.find(c => c.name === 'log');
+    var logChannel = message.guild.channels.find("name", logs[message.guild.id].channel)
     if(!logChannel) return;
  
     let messageDelete = new Discord.RichEmbed()
@@ -427,7 +427,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
     if(!oldMessage.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
     if(!oldMessage.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
  
-    var logChannel = oldMessage.guild.channels.find(c => c.name === 'log');
+    var logChannel = oldMessage.guild.channels.find("name", logs[message.guild.id].channel)
     if(!logChannel) return;
  
     if(oldMessage.content.startsWith('https://')) return;
@@ -446,7 +446,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 
 //roleCreate
 client.on('roleCreate', rc => {
-    const channel = rc.guild.channels.find(c => c.name === 'log');
+    const channel = rc.guild.channels.find("name", logs[message.guild.id].channel)
 	
 	    rc.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -465,7 +465,7 @@ client.on('roleCreate', rc => {
 
 //roleUpdate
 client.on('roleUpdate', (old, nw) => {
-    const channel = old.guild.channels.find(c => c.name === 'log');
+    const channel = old.guild.channels.find("name", logs[message.guild.id].channel)
     
     if(old.name !== nw.name) {
         old.guild.fetchAuditLogs().then(logs => {
@@ -486,7 +486,7 @@ client.on('roleUpdate', (old, nw) => {
 
 //roleDelete
 client.on('roleDelete', rd => {
-    const channel = rd.guild.channels.find(c => c.name === 'log');
+    const channel = rd.guild.channels.find("name", logs[message.guild.id].channel)
 	
 	    rd.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -509,7 +509,7 @@ client.on('voiceStateUpdate', (voiceOld, voiceNew) => {
   if(!voiceOld.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
   if(!voiceOld.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
 
-  var logChannel = voiceOld.guild.channels.find(c => c.name === 'log');
+  var logChannel = voiceOld.guild.channels.find("name", logs[message.guild.id].channel)
   if(!logChannel) return;
 
   voiceOld.guild.fetchAuditLogs().then(logs => {
