@@ -7,6 +7,7 @@ const id = [process.env.id1 , process.env.id2 , process.env.id3];
 ////////////elmewal3///////////////a7med//////////////////anas
 const moment = require("moment"); 
 const child_process = require("child_process");
+let logs = JSON.parse(fs.readFileSync(`./logs.json`, `utf8`)); 
 
 //console
 client.on('ready', () => {
@@ -156,6 +157,17 @@ if (message.content.startsWith(prefix + 'setavatar')) {
 }
 });
 
+
+client.on('message', message => {
+  if(!logs[message.guild.id]) logs[message.guild.id] = {
+  onoff: 'Off',
+  channel: 'logs' 
+  };
+  if(logs[message.guild.id].onoff === 'Off') return;
+  let logchannel = message.guild.channels.find("name", logs[message.guild.id].channel)
+ 
+});
+client.on('message', message => {
 //channel-Create
 client.on('channelCreate', cc => {
     const channel = cc.guild.channels.find(c => c.name === 'log');
@@ -578,5 +590,44 @@ client.on('voiceStateUpdate', (voiceOld, voiceNew) => {
       logChannel.send(voiceLeave);
   }
 });
+})
+client.on('message', message => {
+ 
+ 
+if(!message.guild) return; 
+  if(!logs[message.guild.id]) logs[message.guild.id] = {
+  onoff: 'Off',
+  channel: 'logs'
+  };
+ 
+if(message.content.startsWith(prefix + 'setlogs')) {
+         
+  let perm = message.member.hasPermission(`ADMINISTRATOR`) || message.member.hasPermission(`MANAGE_SERVER`)
+ 
+  if(!perm) return;
+  let args = message.content.split(" ").slice(1);
+  if(!args.join(" ")) return message.channel.send(`:gear: **| Correct usage**:
+\`=setlogs toggle / set <channel name>\``);
+  let state = args[0];
+  if(!state.trim().toLowerCase() == 'toggle') return message.channel.send(`Please type a right state ON / OFF`) ;
+    if(state.trim().toLowerCase() == 'toggle') {
+     if(logs[message.guild.id].onoff === 'Off') return [message.channel.send(`:white_check_mark: **| Logs for this server has been turned on.**`), logs[message.guild.id].onoff = 'On'];
+     if(logs[message.guild.id].onoff === 'On') return [message.channel.send(`:white_check_mark: **| Logs for this server has been turned off.**`), logs[message.guild.id].onoff = 'Off'];
+    }
+ 
+   if(state.trim().toLowerCase() == 'set') {
+   let newChannel = message.content.split(" ").slice(2).join(" ");
+   if(!newChannel) return message.channel.send(`:gear: **| To set the logging channel use**:
+\`=setlogs set <channel name>\``);
+     if(!message.guild.channels.find(`name`,newChannel)) return message.channel.send(`:mag_right: **| I can't find this channel.**`);
+    logs[message.guild.id].role = newChannel;
+     message.channel.send(`:shield: **| Logging channel has been changed to**:
+\`${newChannel}\``);
+   }
+         }
+    fs.writeFile("./logs.json", JSON.stringify(logs), (err) => {
+    if (err) console.error(err);
+  });
+}); 
 
 client.login(process.env.BOT_TOKEN);
