@@ -158,20 +158,9 @@ if (message.content.startsWith(prefix + 'setavatar')) {
 }
 });
 
-
-client.on('message', message => {
-  if(!logs[message.guild.id]) logs[message.guild.id] = {
-  onoff: 'Off',
-  channel: 'logs' 
-  };
-  if(logs[message.guild.id].onoff === 'Off') return;
-  let logchannel = message.guild.channels.find("name", logs[message.guild.id].channel)
- 
-});
-client.on('message', message => {
 //channel-Create
 client.on('channelCreate', cc => {
-    const channel = cc.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = cc.guild.channels.find("name", "log")
 	
 	if(cc.type === 'text') {
         var roomType = ':pencil: #';
@@ -202,7 +191,7 @@ client.on('channelCreate', cc => {
 client.on('channelUpdate', (oldChannel, newChannel) => {
     if(!oldChannel.guild) return;
  
-    var logChannel = oldChannel.guild.channels.find("name", logs[message.guild.id].channel)
+    var logChannel = oldChannel.guild.channels.find("name", "log")
     if(!logChannel) return;
  
     if(oldChannel.type === 'text') {
@@ -235,7 +224,7 @@ client.on('channelUpdate', (oldChannel, newChannel) => {
 
 //channel-Delete
 client.on('channelDelete', dc => {
-    const channel = dc.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = dc.guild.channels.find("name", "log")
 	
 	if(dc.type === 'text') {
         var roomType = ':pencil: #';
@@ -265,7 +254,7 @@ client.on('channelDelete', dc => {
 //guild-Member-Add
 client.on('guildMemberAdd', member => {
 
-     const join =  member.guild.channels.find("name", logs[message.guild.id].channel)
+     const join =  member.guild.channels.find("name", "log")
      
     if(!join) return;
       if(join) {
@@ -289,7 +278,7 @@ client.on('guildMemberRemove', member => {
     if (!member || !member.id || !member.guild || !member.guild) return;
     const guild = member.guild;
 	
-    const channel = member.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = member.guild.channels.find("name", "log")
     if (!channel) return;
     let memberavatar = member.user.avatarURL
     const fromNow = moment(member.joinedTimestamp).fromNow();
@@ -307,7 +296,7 @@ client.on('guildMemberRemove', member => {
 
 //guildMemberUpdate
 client.on('guildMemberUpdate', (oldm, newm) => {
-	const channel = oldm.guild.channels.find("name", logs[message.guild.id].channel)
+	const channel = oldm.guild.channels.find("name", "log")
 	if (oldm.roles.size !== newm.roles.size) {
 		
     if (oldm.roles.size > newm.roles.size) {
@@ -352,7 +341,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
 client.on('guildBanAdd', (guild, user) => {
  
  
-    var logChannel = guild.channels.find("name", logs[message.guild.id].channel)
+    var logChannel = guild.channels.find("name", "log")
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
@@ -377,7 +366,7 @@ client.on('guildBanAdd', (guild, user) => {
 //guildBanRemove
 client.on('guildBanRemove', (guild, user) => {
  
-    var logChannel = guild.channels.find("name", logs[message.guild.id].channel)
+    var logChannel = guild.channels.find("name", "log")
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
@@ -405,7 +394,7 @@ client.on('messageDelete', message => {
     if(!message.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
     if(!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
  
-    var logChannel = message.guild.channels.find("name", logs[message.guild.id].channel)
+    var logChannel = message.guild.channels.find("name", "log")
     if(!logChannel) return;
  
     let messageDelete = new Discord.RichEmbed()
@@ -427,7 +416,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
     if(!oldMessage.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
     if(!oldMessage.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return;
  
-    var logChannel = oldMessage.guild.channels.find("name", logs[message.guild.id].channel)
+    var logChannel = oldMessage.guild.channels.find("name", "log")
     if(!logChannel) return;
  
     if(oldMessage.content.startsWith('https://')) return;
@@ -446,7 +435,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 
 //roleCreate
 client.on('roleCreate', rc => {
-    const channel = rc.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = rc.guild.channels.find("name", "log")
 	
 	    rc.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -465,7 +454,7 @@ client.on('roleCreate', rc => {
 
 //roleUpdate
 client.on('roleUpdate', (old, nw) => {
-    const channel = old.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = old.guild.channels.find("name", "log")
     
     if(old.name !== nw.name) {
         old.guild.fetchAuditLogs().then(logs => {
@@ -486,7 +475,7 @@ client.on('roleUpdate', (old, nw) => {
 
 //roleDelete
 client.on('roleDelete', rd => {
-    const channel = rd.guild.channels.find("name", logs[message.guild.id].channel)
+    const channel = rd.guild.channels.find("name", "log")
 	
 	    rd.guild.fetchAuditLogs().then(logs => {
 	var userid = logs.entries.first().executor.id;
@@ -509,7 +498,7 @@ client.on('voiceStateUpdate', (voiceOld, voiceNew) => {
   if(!voiceOld.guild.member(client.user).hasPermission('EMBED_LINKS')) return;
   if(!voiceOld.guild.member(client.user).hasPermission('VIEW_AUDIT_LOG')) return;
 
-  var logChannel = voiceOld.guild.channels.find("name", logs[message.guild.id].channel)
+  var logChannel = voiceOld.guild.channels.find("name", "log")
   if(!logChannel) return;
 
   voiceOld.guild.fetchAuditLogs().then(logs => {
@@ -591,44 +580,5 @@ client.on('voiceStateUpdate', (voiceOld, voiceNew) => {
       logChannel.send(voiceLeave);
   }
 });
-})
-client.on('message', message => {
- 
- 
-if(!message.guild) return; 
-  if(!logs[message.guild.id]) logs[message.guild.id] = {
-  onoff: 'Off',
-  channel: 'logs'
-  };
- 
-if(message.content.startsWith(prefix + 'setlogs')) {
-         
-  let perm = message.member.hasPermission(`ADMINISTRATOR`) || message.member.hasPermission(`MANAGE_SERVER`)
- 
-  if(!perm) return;
-  let args = message.content.split(" ").slice(1);
-  if(!args.join(" ")) return message.channel.send(`:gear: **| Correct usage**:
-\`=setlogs toggle / set <channel name>\``);
-  let state = args[0];
-  if(!state.trim().toLowerCase() == 'toggle') return message.channel.send(`Please type a right state ON / OFF`) ;
-    if(state.trim().toLowerCase() == 'toggle') {
-     if(logs[message.guild.id].onoff === 'Off') return [message.channel.send(`:white_check_mark: **| Logs for this server has been turned on.**`), logs[message.guild.id].onoff = 'On'];
-     if(logs[message.guild.id].onoff === 'On') return [message.channel.send(`:white_check_mark: **| Logs for this server has been turned off.**`), logs[message.guild.id].onoff = 'Off'];
-    }
- 
-   if(state.trim().toLowerCase() == 'set') {
-   let newChannel = message.content.split(" ").slice(2).join(" ");
-   if(!newChannel) return message.channel.send(`:gear: **| To set the logging channel use**:
-\`=setlogs set <channel name>\``);
-     if(!message.guild.channels.find(`name`,newChannel)) return message.channel.send(`:mag_right: **| I can't find this channel.**`);
-    logs[message.guild.id].role = newChannel;
-     message.channel.send(`:shield: **| Logging channel has been changed to**:
-\`${newChannel}\``);
-   }
-         }
-    fs.writeFile("./logs.json", JSON.stringify(logs), (err) => {
-    if (err) console.error(err);
-  });
-}); 
 
 client.login(process.env.BOT_TOKEN);
