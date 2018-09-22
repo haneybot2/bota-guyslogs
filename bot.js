@@ -313,6 +313,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     .setColor('#ff0000')
     .setFooter(`${usertag}`, userava)
     .setTimestamp();
+		
     channel.sendEmbed(embed)
     })
         
@@ -331,6 +332,7 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     .setColor('#ff0000')
     .setFooter(`${usertag}`, userava)
     .setTimestamp();
+    
     channel.sendEmbed(embed)
     })
     }
@@ -340,8 +342,8 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     .setAuthor(oldm.guild.name, oldm.guild.iconURL)
     .setColor('#ff0000')
     .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:**\n\`\`\`html\n<ownerID:${oldm.user.id}>\`\`\`\n:white_check_mark: **NEW:**\n\`\`\`html\n<ownerID:${newm.user.id}>\`\`\`\nby : `)
-    .setTimestamp()
     .setFooter(oldm.guild.name, oldm.guild.iconURL)
+        .setTimestamp()
 
     channel.send(newOwner);
 }
@@ -361,7 +363,7 @@ client.on('guildUpdate', (oldGuild, newGuild) => {
 
       if(oldGuild.name !== newGuild.name) {
           let guildName = new Discord.RichEmbed()
-          .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+          .setAuthor(oldGuild.name, oldGuild.iconURL)
           .setColor('#ff0000')
           .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<name: ${oldGuild.name}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<name: ${newGuild.name}>\`\`\`\nby : <@${userid}>`)
           .setFooter(usertag, userava)
@@ -371,7 +373,7 @@ client.on('guildUpdate', (oldGuild, newGuild) => {
       }
       if(oldGuild.region !== newGuild.region) {
         let guildRegion = new Discord.RichEmbed()
-        .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+        .setAuthor(oldGuild.name, oldGuild.iconURL)
         .setColor('#ff0000')
         .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<region: ${oldGuild.region}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<region: ${newGuild.region}>\`\`\`\nby : <@${userid}>`)
         .setFooter(usertag, userava)
@@ -413,7 +415,7 @@ client.on('guildUpdate', (oldGuild, newGuild) => {
           }
 
           let verLog = new Discord.RichEmbed()
-          .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+          .setAuthor(oldGuild.name, oldGuild.iconURL)
           .setColor('#ff0000')
           .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<verificationLevel: ${oldVerLvl}[${oldGuild.verificationLevel}]>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<verificationLevel: ${oldVerLvl}[${newGuild.verificationLevel}]>\`\`\`\nby : <@${userid}>`)
           .setFooter(usertag, userava)
