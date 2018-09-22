@@ -337,6 +337,83 @@ client.on('guildMemberUpdate', (oldm, newm) => {
 	}
 });
 
+//guildUpdate
+client.on('guildUpdate', (oldGuild, newGuild) => {
+
+
+  var logChannel = oldGuild.channels.find(c => c.name === 'log');
+  if(!logChannel) return;
+
+  oldGuild.fetchAuditLogs().then(logs => {
+      var userid = logs.entries.first().executor.id;
+      var userava = logs.entries.first().executor.avatarURL;
+      var usertag = logs.entries.first().executor.tag;
+
+      if(oldGuild.name !== newGuild.name) {
+          let guildName = new Discord.RichEmbed()
+          .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+          .setColor('#ff0000')
+          .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<name: ${oldGuild.name}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<name: ${newGuild.name}>\`\`\`\nby : <@${userid}>`)
+          .setFooter(usertag, userava)
+          .setTimestamp()
+
+          logChannel.send(guildName)
+      }
+      if(oldGuild.region !== newGuild.region) {
+        let guildRegion = new Discord.RichEmbed()
+        .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+        .setColor('#ff0000')
+        .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<region: ${oldGuild.region}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<region: ${newGuild.region}>\`\`\`\nby : <@${userid}>`)
+        .setFooter(usertag, userava)
+        .setTimestamp()
+
+        logChannel.send(guildRegion);
+    }
+      if(oldGuild.verificationLevel !== newGuild.verificationLevel) {
+          if(oldGuild.verificationLevel === 0) {
+              var oldVerLvl = 'Very Easy';
+          }else
+          if(oldGuild.verificationLevel === 1) {
+              var oldVerLvl = 'Easy';
+          }else
+          if(oldGuild.verificationLevel === 2) {
+              var oldVerLvl = 'Medium';
+          }else
+          if(oldGuild.verificationLevel === 3) {
+              var oldVerLvl = 'Hard';
+          }else
+          if(oldGuild.verificationLevel === 4) {
+              var oldVerLvl = 'Very Hard';
+          }
+
+          if(newGuild.verificationLevel === 0) {
+              var newVerLvl = 'Very Easy';
+          }else
+          if(newGuild.verificationLevel === 1) {
+              var newVerLvl = 'Easy';
+          }else
+          if(newGuild.verificationLevel === 2) {
+              var newVerLvl = 'Medium';
+          }else
+          if(newGuild.verificationLevel === 3) {
+              var newVerLvl = 'Hard';
+          }else
+          if(newGuild.verificationLevel === 4) {
+              var newVerLvl = 'Very Hard';
+          }
+
+          let verLog = new Discord.RichEmbed()
+          .setAuthor(oldGuild.guild.name, oldGuild.guild.iconURL)
+          .setColor('#ff0000')
+          .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<verificationLevel: ${oldVerLvl}[${oldGuild.verificationLevel}]>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<verificationLevel: ${oldVerLvl}[${newGuild.verificationLevel}]>\`\`\`\nby : <@${userid}>`)
+          .setFooter(usertag, userava)
+          .setTimestamp()
+
+          logChannel.send(verLog);
+      }
+  })
+});
+
 //guildBanAdd
 client.on('guildBanAdd', (guild, user) => {
  
