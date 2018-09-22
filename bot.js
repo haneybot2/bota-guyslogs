@@ -333,8 +333,18 @@ client.on('guildMemberUpdate', (oldm, newm) => {
     .setTimestamp();
     channel.sendEmbed(embed)
     })
-    };
-	}
+    }
+    }
+  if(oldm.guild.owner.id !== newm.guild.owner.id) {
+    let newOwner = new Discord.RichEmbed()
+    .setAuthor(oldm.guild.name, oldm.guild.iconURL)
+    .setColor('#ff0000')
+    .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:**\n\`\`\`html\n<ownerID:${oldm.user.id}>\`\`\`\n:white_check_mark: **NEW:**\n\`\`\`html\n<ownerID:${newm.user.id}>\`\`\`\nby : `)
+    .setTimestamp()
+    .setFooter(oldm.guild.name, oldm.guild.iconURL)
+
+    channel.send(newOwner);
+}
 });
 
 //guildUpdate
