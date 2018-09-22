@@ -375,7 +375,7 @@ client.on('guildUpdate', (oldGuild, newGuild) => {
         let guildRegion = new Discord.RichEmbed()
         .setAuthor(oldGuild.name, oldGuild.iconURL)
         .setColor('#ff0000')
-        .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<region: ${oldGuild.region}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<region: ${newGuild.region}>\`\`\`\nby : <@${userid}>`)
+        .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:**\n\`\`\`html\n<region: ${oldGuild.region}>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<region: ${newGuild.region}>\`\`\`\nby : <@${userid}>`)
         .setFooter(usertag, userava)
         .setTimestamp()
 
@@ -417,7 +417,7 @@ client.on('guildUpdate', (oldGuild, newGuild) => {
           let verLog = new Discord.RichEmbed()
           .setAuthor(oldGuild.name, oldGuild.iconURL)
           .setColor('#ff0000')
-          .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:\n\`\`\`html\n<verificationLevel: ${oldVerLvl}[${oldGuild.verificationLevel}]>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<verificationLevel: ${oldVerLvl}[${newGuild.verificationLevel}]>\`\`\`\nby : <@${userid}>`)
+          .setDescription(`:star2: **Server Settings have been updated**\n:x:**OLD:**\n\`\`\`html\n<verificationLevel: ${oldVerLvl}[${oldGuild.verificationLevel}]>\`\`\`\n:white_check_mark:**NEW:**\`\`\`html\n<verificationLevel: ${oldVerLvl}[${newGuild.verificationLevel}]>\`\`\`\nby : <@${userid}>`)
           .setFooter(usertag, userava)
           .setTimestamp()
 
