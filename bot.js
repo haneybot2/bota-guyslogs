@@ -434,8 +434,8 @@ client.on('guildBanAdd', (guild, user) => {
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
-        var userID = logs.entries.first().executor.id;
-        var userAvatar = logs.entries.first().executor.avatarURL;
+	var userid = logs.entries.first().executor.id;
+	var userava = logs.entries.first().executor.avatarURL;
 	var usertag = logs.entries.first().executor.tag;
  
         if(userID === client.user.id) return;
@@ -445,7 +445,7 @@ client.on('guildBanAdd', (guild, user) => {
         .setThumbnail(user.avatarURL)
         .setColor('#ff0000')
         .setDescription(`**:airplane: <@${user.id}> banned from the server**\nby : <@${userid}>`)
-        .setFooter(`${usertag}`, userAvatar)
+        .setFooter(`${usertag}`, userava)
 	.setTimestamp()
  
         logChannel.send(banInfo);
@@ -459,8 +459,8 @@ client.on('guildBanRemove', (guild, user) => {
     if(!logChannel) return;
  
     guild.fetchAuditLogs().then(logs => {
-        var userID = logs.entries.first().executor.id;
-        var userAvatar = logs.entries.first().executor.avatarURL;
+	var userid = logs.entries.first().executor.id;
+	var userava = logs.entries.first().executor.avatarURL;
 	var usertag = logs.entries.first().executor.tag;
  
         let unBanInfo = new Discord.RichEmbed()
@@ -468,7 +468,7 @@ client.on('guildBanRemove', (guild, user) => {
         .setThumbnail(user.avatarURL)
         .setColor('#ff0000')
         .setDescription(`**:blue_car: The ban of <@${user.id}> has been removed**\nby : <@${userid}>`)
-        .setFooter(`${usertag}`, userAvatar)
+        .setFooter(`${usertag}`, userava)
 		.setTimestamp()
  
         logChannel.send(unBanInfo);
